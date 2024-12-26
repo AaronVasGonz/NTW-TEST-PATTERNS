@@ -1,0 +1,6 @@
+@NTW_TEST_PATTERNS_HostAddress = http://localhost:5055
+
+GET {{NTW_TEST_PATTERNS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

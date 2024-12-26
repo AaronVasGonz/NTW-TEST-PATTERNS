@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>NTW_TEST_PATTERNS.Strategy</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NTW-TEST-PATTERNS.Arquitecture\NTW-TEST-PATTERNS.Arquitecture.csproj" />
+    <ProjectReference Include="..\NTW-TEST-PATTERNS.Models\NTW-TEST-PATTERNS.Models.csproj" />
+  </ItemGroup>
+
+</Project>
