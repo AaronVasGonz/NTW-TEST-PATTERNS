@@ -10,10 +10,10 @@ using Services;
 using Models;
 using Service.Mappers;
 using Microsoft.Extensions.Logging;
+using Strategies.Authentication;
 
 
-namespace Strategies.Auth;
-
+namespace Strategies.Authentication;
 public class EmailRegisterAuthentication : IRegistrationStrategy
     {
         private readonly IUserService _userService;
@@ -41,6 +41,15 @@ public class EmailRegisterAuthentication : IRegistrationStrategy
 
         userRegistrationData.Password = _passwordHashingService.HashPassword(userRegistrationData.Password);
         User user = _userMapper.MapUserFromUserRegistrationData(userRegistrationData);
+
+        //now we goin to verify if the username exists
+        var userExistsByUsername = await _userService.GetUserByUsernameAsync(user.Username);
+        if (userExistsByUsername != null) throw new InvalidOperationException("User with this username already exists");
+
+        //now we goin to verify if the user exists
+        var userExistsByEmail = await _userService.GetUserByEmailAsync(user.Email);
+        if (userExistsByEmail != null) throw new InvalidOperationException("User with this email already Exists");
+  
         user.Status = "Inactive";
         var savedUser = await _userService.SaveUserAsync(user);
         var savedUserRole = await _userRoleService.SaveUserRole(savedUser.UserId, _idRoles[0]);
@@ -76,9 +85,8 @@ public class EmailRegisterAuthentication : IRegistrationStrategy
             {
                 // Log the exception or handle it as needed
                 _logger.LogError(ex, "Invalid User Registration Data");
-                return false;
+            return false;
             }
             return true;
         }
-
 }

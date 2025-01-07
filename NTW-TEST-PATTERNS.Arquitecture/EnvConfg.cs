@@ -1,12 +1,10 @@
 ﻿using DotNetEnv;
-
-using DotNetEnv;
 using System;
 using System.IO;
 
 public class EnvConfig
 {
-    private static readonly string EnvFilePath = @"C:\Users\Steven\source\repos\NTW-TEST-PATTERNS\NTW-TEST-PATTERNS.Arquitecture\.env";
+    private static readonly string EnvFilePath = @"C:\Users\arjoz\Source\Repos\NTW-TEST-PATTERNS\NTW-TEST-PATTERNS.Arquitecture\.env";
     public static void Initialize()
     {
         Console.WriteLine($"Cargando el archivo .env desde: {EnvFilePath}");

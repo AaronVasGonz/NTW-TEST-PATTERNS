@@ -6,22 +6,25 @@ using Service.Services;
 using Services;
 using System.Text;
 using Service.Mappers;
-using Strategies.Auth;
+using Strategies.Authentication;
 using Arquitecture;
 using Arquitecture.Handlers;
 using Strategies.EmailSenderStrategy;
 using Service.Strategies.EmailSenderStrategy;
 using Architecture;
 using System.Security.Claims;
+using Service.Strategies.Login;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder => builder.WithOrigins("http://localhost:5173")
                           .AllowAnyHeader()
+                          .AllowCredentials()
                           .AllowAnyMethod());
 });
 
@@ -70,6 +73,10 @@ builder.Services.AddScoped<IJwtHandler>(provider => new JwtHandler(jtwKey, 60,"s
 builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
 builder.Services.AddScoped<IEmailSenderStrategy, SendDefaultEmailStrategy>();
 builder.Services.AddScoped<ISendEmailStrategyContext, SendEmailStrategyContext>();
+builder.Services.AddScoped<ILoginStrategy, EmailorUsernameLogin>();
+builder.Services.AddScoped<ILoginStrategy, GoogleLogin>();
+builder.Services.AddScoped<ILoginStrategy, GithubLogin>();
+builder.Services.AddScoped<ILoginStrategyContext, LoginStrategyContext>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt =>
 {

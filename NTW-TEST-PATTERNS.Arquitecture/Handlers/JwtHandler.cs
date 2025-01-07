@@ -9,7 +9,7 @@ namespace Arquitecture.Handlers
 {
     public interface IJwtHandler
     {
-        string GenerateToken(string userId, List<string> roles = null, Dictionary<string, string> additionalClaims = null);
+        string GenerateToken(string userId, string username ,List<string> roles = null, Dictionary<string, string> additionalClaims = null);
         ClaimsPrincipal GetPrincipalFromToken(string token);
     }
 
@@ -30,7 +30,7 @@ namespace Arquitecture.Handlers
         }
 
         // Method to generate the token, with additional claims flexibility
-        public string GenerateToken(string userId, List<string> roles = null, Dictionary<string, string> additionalClaims = null)
+        public string GenerateToken(string userId, string username, List<string> roles = null, Dictionary<string, string> additionalClaims = null)
         {
             // Create the security key
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
@@ -40,7 +40,9 @@ namespace Arquitecture.Handlers
             var claims = new List<Claim>
             {
                 // Add userId as the main claim with the configured claim name
-                new Claim(_claimUserIdName, userId)
+                new Claim(_claimUserIdName, userId),
+                new Claim("username", username)
+
             };
 
             // Add additional claims if provided

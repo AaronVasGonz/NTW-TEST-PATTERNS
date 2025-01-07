@@ -13,6 +13,10 @@ namespace Data.Repository
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetUserByIdAsync(int id);
         Task<User> SaveAsync(User user);
+
+        Task<User> GetUserByEmailAsync(string email);
+
+        Task<User> GetUserByUsernameAsync(string username);
     }
 
     /// <summary>
@@ -41,6 +45,20 @@ namespace Data.Repository
             // Reads all users and returns the first matching one by ID
             var users = await ReadAsync();
             return users.FirstOrDefault(u => u.UserId == id);
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            // Reads all users and returns the first matching one by email
+            var users = await ReadAsync();
+            return users.FirstOrDefault(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            // Reads all users and returns the first matching one by username
+            var users = await ReadAsync();
+            return users.FirstOrDefault(u => u.Username == username);
         }
 
         /// <summary>

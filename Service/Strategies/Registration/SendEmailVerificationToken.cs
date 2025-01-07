@@ -4,8 +4,10 @@ using Service;
 using Service.Services;
 using Strategies.EmailSenderStrategy;
 
-namespace Service.Strategies.Authentication
-{
+
+
+namespace Strategies.Authentication;
+
     public class SendEmailVerificationToken : IEmailSenderStrategy
     {
         private readonly IEmailSenderService _emailSenderService;
@@ -39,4 +41,4 @@ namespace Service.Strategies.Authentication
             }
         }
     }
-}
+

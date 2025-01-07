@@ -1,5 +1,5 @@
 ﻿using Service.Services;
-using Service.Strategies.Authentication;
+using Strategies.Authentication;
 using Service.Strategies.EmailSenderStrategy;
 using System;
 using System.Collections.Generic;

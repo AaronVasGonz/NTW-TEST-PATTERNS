@@ -3,13 +3,14 @@ using Models.DTOS;
 using Service.Mappers;
 using Service.Services;
 using Services;
-using Strategies.Auth;
+using Strategies.Authentication;
 using System;
 using System.Threading.Tasks;
 
-using Strategies.Auth;
+using Strategies.Authentication;
 using Models;
 
+namespace Strategies.Authentication;
 public interface IAuthenticationStrategyContext
     {
         Task<User> RegisterUser(UserRegistrationData userRegistrationData);

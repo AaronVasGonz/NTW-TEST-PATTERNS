@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Strategies.Auth;
+
+
+namespace Strategies.Authentication;
 public interface IRegistrationStrategy
 {
     // This method could be for the normal registration flow
