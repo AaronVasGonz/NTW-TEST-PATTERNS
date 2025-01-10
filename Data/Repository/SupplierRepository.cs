@@ -33,6 +33,13 @@ namespace Data.Repository
         Task<Supplier> GetSupplierByIdAsync(int id);
 
         /// <summary>
+        /// Retrieves a supplier by its name asynchronously.
+        /// </summary>
+        ///  <param name="name">The name of the supplier to retrieve.</param>
+        ///  <returns>The supplier object if found, otherwise null.</returns>
+        Task<Supplier> GetSupplierBYNameAsync(string name);
+
+        /// <summary>
         /// Saves a supplier asynchronously. If the supplier exists, it updates it, otherwise creates a new supplier.
         /// </summary>
         /// <param name="supplier">The supplier to save or update.</param>
@@ -66,6 +73,13 @@ namespace Data.Repository
             // Reads all suppliers and returns the first matching one by ID
             var suppliers = await ReadAsync();
             return suppliers.FirstOrDefault(s => s.SupplierId == id);
+        }
+
+        public async Task<Supplier> GetSupplierBYNameAsync(string name)
+        {
+            // Reads all suppliers and returns the first matching one by name
+            var suppliers = await ReadAsync();
+            return suppliers.FirstOrDefault(s => s.SupplierName == name);
         }
 
         /// <summary>

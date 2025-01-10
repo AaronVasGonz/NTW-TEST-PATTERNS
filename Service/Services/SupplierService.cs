@@ -12,6 +12,9 @@ public interface ISupplierService
 {
     Task<bool> DeleteSupplierAsync(int id);
     Task<Supplier> GetSupplierByIdAsync(int id);
+
+    Task<Supplier> GetSupplierBYName(string name);
+
     Task<IEnumerable<Supplier>> GetSuppliersAsync();
     Task<Supplier> SaveSupplierAsync(Supplier supplier);
 }
@@ -37,6 +40,11 @@ public class SupplierService : ISupplierService
     public async Task<Supplier> SaveSupplierAsync(Supplier supplier)
     {
         return await _supplierRepository.SaveSupplierAsync(supplier);
+    }
+
+    public async Task<Supplier> GetSupplierBYName(string name)
+    {
+        return await _supplierRepository.GetSupplierBYNameAsync(name);
     }
 
     public async Task<bool> DeleteSupplierAsync(int id)

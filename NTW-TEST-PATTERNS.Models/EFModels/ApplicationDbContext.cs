@@ -47,10 +47,10 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2BAA612614");
-
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(25);
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(10);
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -140,6 +140,8 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
             entity.Property(e => e.Unit).HasMaxLength(25);
+            entity.Property(e => e.Status).HasMaxLength(10);
+            entity.Property(e => e.Stock).HasColumnName("stock");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
@@ -185,8 +187,8 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(15);
             entity.Property(e => e.PostalCode).HasMaxLength(10);
             entity.Property(e => e.SupplierName).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(10);
         });
-
 
 
         modelBuilder.Entity<User>(entity =>

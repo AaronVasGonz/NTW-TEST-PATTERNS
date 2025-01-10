@@ -30,6 +30,14 @@ namespace Data.Repository
             /// <returns>The category object if found, otherwise null.</returns>
             Task<Category> GetCategoryByIdAsync(int id);
 
+
+            /// <summary>
+            /// Retrieves a category by its name asynchronously.
+            /// </summary>
+            /// <param name="name">The name of the category to retrieve.</param>
+            /// <returns>The category object if found, otherwise null.</returns>
+            Task<Category> GetCategoryByNameAsync(string name);
+
             /// <summary>
             /// Saves a category asynchronously. It performs an update if the category already exists, or creates a new one if not.
             /// </summary>
@@ -64,6 +72,13 @@ namespace Data.Repository
                 // Reads all categories and returns the first matching one by ID
                 var categories = await ReadAsync();
                 return categories.FirstOrDefault(c => c.CategoryId == id);
+            }
+
+            public async Task<Category> GetCategoryByNameAsync(string name)
+            {
+                // Reads all categories and returns the first matching one by name
+                var categories = await ReadAsync();
+                return categories.FirstOrDefault(c => c.CategoryName == name);
             }
 
             /// <summary>

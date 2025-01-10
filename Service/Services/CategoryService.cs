@@ -14,6 +14,8 @@ public interface ICategoryService
     Task<IEnumerable<Category>> GetCategoriesAsync();
     Task<Category> GetCategoryByIdAsync(int id);
     Task<Category> SaveCategoryAsync(Category category);
+
+    Task<Category> GetCategoryByNameAsync(string name);
 }
 
 public class CategoryService : ICategoryService
@@ -33,6 +35,11 @@ public class CategoryService : ICategoryService
     public async Task<Category> GetCategoryByIdAsync(int id)
     {
         return await _categoryRepository.GetCategoryByIdAsync(id);
+    }
+
+    public async Task<Category> GetCategoryByNameAsync(string name)
+    {
+        return await _categoryRepository.GetCategoryByNameAsync(name);
     }
 
     public async Task<Category> SaveCategoryAsync(Category category)

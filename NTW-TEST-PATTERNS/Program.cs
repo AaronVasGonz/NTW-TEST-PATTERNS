@@ -14,6 +14,7 @@ using Service.Strategies.EmailSenderStrategy;
 using Architecture;
 using System.Security.Claims;
 using Service.Strategies.Login;
+using Service.Services.validations.Products;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +75,7 @@ builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
 builder.Services.AddScoped<IEmailSenderStrategy, SendDefaultEmailStrategy>();
 builder.Services.AddScoped<ISendEmailStrategyContext, SendEmailStrategyContext>();
 builder.Services.AddScoped<ILoginStrategy, EmailorUsernameLogin>();
+builder.Services.AddScoped<IValidateProductService, ValidateProductService>();
 builder.Services.AddScoped<ILoginStrategy, GoogleLogin>();
 builder.Services.AddScoped<ILoginStrategy, GithubLogin>();
 builder.Services.AddScoped<ILoginStrategyContext, LoginStrategyContext>();
