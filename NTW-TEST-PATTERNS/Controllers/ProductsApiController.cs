@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.DTOS;
+using NTW_TEST_PATTERNS.Models.EFModels;
 using Service.Services;
 using Service.Services.validations.Products;
+using Service.Strategies.ImageUploader;
 using Services;
 using Sprache;
 
@@ -17,12 +19,26 @@ namespace NTW_TEST_PATTERNS.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ICategoryService _categoryService;
         private readonly IValidateProductService _validateProductService;
-        public ProductsApiController(IProductService productService, ISupplierService supplierService, ICategoryService categoryService, IValidateProductService validateProductService)
+        private readonly IImageUploaderContext _imageUploaderContext;
+        private readonly IImageConverterService _imageConverterService;
+        private readonly IProductImageService _productImageService;
+        public ProductsApiController(
+            IProductService productService,
+            ISupplierService supplierService, 
+            ICategoryService categoryService, 
+            IValidateProductService validateProductService,
+            IImageUploaderContext imageUploaderContext,
+            IImageConverterService imageConverterService,
+            IProductImageService productImageService
+            )
         {
             _productService = productService;
             _supplierService = supplierService;
             _categoryService = categoryService;
             _validateProductService = validateProductService;
+            _imageUploaderContext = imageUploaderContext;
+            _imageConverterService = imageConverterService;
+            _productImageService = productImageService;
         }
 
         [HttpGet("getAll")]
@@ -40,7 +56,7 @@ namespace NTW_TEST_PATTERNS.Controllers
         }
 
         [HttpPost("save")]
-        public async Task<IActionResult> SaveProduct([FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> SaveProduct([FromForm] ProductRequest productRequest)
         {
             try
             {
@@ -82,7 +98,28 @@ namespace NTW_TEST_PATTERNS.Controllers
                     Status = productRequest.Status
                 };
 
-                await _productService.SaveProductAsync(product);
+                var productSave = await _productService.SaveProductAsync(product);
+
+
+                //convert the images to streams
+                var imagesStreams = await _imageConverterService.ConvertImagesToStreamsAsync(productRequest.Images);
+
+                //upload the images
+                var imagesUrls = await _imageUploaderContext.UploadMultipleImageAsync(imagesStreams, productSave.ProductName);
+
+
+                //save the images in the database
+                foreach (var imageUrl in imagesUrls)
+                {
+                    var productImage = new Product_Image
+                    {
+                        ProductId = productSave.ProductId,
+                        ImageUrl = imageUrl
+                    };
+                    await _productImageService.SaveProductImageAsync(productImage);
+                }
+
+
 
                 return Ok(new { message = "Product has been added successfully" });
             }

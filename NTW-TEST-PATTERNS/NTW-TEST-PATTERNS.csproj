@@ -25,7 +25,6 @@
     <ProjectReference Include="..\Data\NWT-TEST-PATTERNS.Data.csproj" />
     <ProjectReference Include="..\NTW-TEST-PATTERNS.Arquitecture\NTW-TEST-PATTERNS.Arquitecture.csproj" />
     <ProjectReference Include="..\NTW-TEST-PATTERNS.Models\NTW-TEST-PATTERNS.Models.csproj" />
-    <ProjectReference Include="..\NTW-TEST-PATTERNS.Strategy\NTW-TEST-PATTERNS.Strategy.csproj" />
     <ProjectReference Include="..\Service\NTW-TEST-PATTERNS.Service.csproj" />
   </ItemGroup>
 

@@ -15,6 +15,7 @@ using Architecture;
 using System.Security.Claims;
 using Service.Strategies.Login;
 using Service.Services.validations.Products;
+using Service.Strategies.ImageUploader;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,7 @@ EnvConfig.Initialize();
 
 //now load the key from the environment variables\
 var jtwKey = Environment.GetEnvironmentVariable("JWT_KEY");
+var firebaseBucketStorage = "spmccr-d02b1.appspot.com";
 
 // Add services to the container.
 
@@ -79,6 +81,15 @@ builder.Services.AddScoped<IValidateProductService, ValidateProductService>();
 builder.Services.AddScoped<ILoginStrategy, GoogleLogin>();
 builder.Services.AddScoped<ILoginStrategy, GithubLogin>();
 builder.Services.AddScoped<ILoginStrategyContext, LoginStrategyContext>();
+builder.Services.AddScoped<IProductImageService, ProductImageService>();
+builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
+builder.Services.AddScoped<IImageUploaderContext, ImageUploaderContext> ();
+builder.Services.AddScoped<IUploadImageStrategy, UploadImageWithFirebase>();
+builder.Services.AddScoped<IImageConverterService, ImageConverterService>();
+builder.Services.AddScoped<IFirebaseStorageService>(provider =>
+{
+    return new FirebaseStorageService(firebaseBucketStorage);
+});
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt =>
 {

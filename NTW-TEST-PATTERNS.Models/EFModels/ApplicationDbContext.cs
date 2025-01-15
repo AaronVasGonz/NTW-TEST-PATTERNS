@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Models.EFModels;
+using NTW_TEST_PATTERNS.Models.EFModels;
 
 namespace Models;
 
@@ -36,7 +37,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    
+    public virtual DbSet<Product_Image> Product_Images { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -44,6 +45,16 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<Product_Image>(entity =>
+        {
+            entity.ToTable("Products_Images");
+            entity.HasKey(e => e.ProductImageId).HasName("PK__Product___D9A1FA005C3A3D3D");
+            entity.Property(e => e.ProductImageId).HasColumnName("productImageId");
+            entity.Property(e => e.ProductId).HasColumnName("productId");
+            entity.Property(e => e.ImageUrl).HasColumnName("image");
+        });
+        
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2BAA612614");
