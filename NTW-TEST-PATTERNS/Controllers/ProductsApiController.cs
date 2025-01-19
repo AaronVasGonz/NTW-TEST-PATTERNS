@@ -40,6 +40,7 @@ namespace NTW_TEST_PATTERNS.Controllers
             _imageConverterService = imageConverterService;
             _productImageService = productImageService;
         }
+        //extra comment
 
         [HttpGet("getAll")]
         public async Task<IActionResult> GetProducts()
