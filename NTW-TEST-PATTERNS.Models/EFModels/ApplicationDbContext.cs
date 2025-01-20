@@ -38,6 +38,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Product_Image> Product_Images { get; set; }
+    
+    public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -45,6 +47,16 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<ExceptionLog>(entity =>
+        {
+            entity.ToTable("ExceptionLog");
+            entity.HasKey(e => e.LogId).HasName("PK__ExceptionLog__D9A1FA005C3A3D3D");
+            entity.Property(e => e.LogId).HasColumnName("logId");
+            entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.StackTrace).HasColumnName("stackTrace");
+            entity.Property(e => e.Date).HasColumnName("dateTime");
+        });
 
         modelBuilder.Entity<Product_Image>(entity =>
         {

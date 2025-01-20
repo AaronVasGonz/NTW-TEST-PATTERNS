@@ -16,6 +16,7 @@ using System.Security.Claims;
 using Service.Strategies.Login;
 using Service.Services.validations.Products;
 using Service.Strategies.ImageUploader;
+using Service.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +40,7 @@ var firebaseBucketStorage = "spmccr-d02b1.appspot.com";
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -86,7 +87,11 @@ builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<IImageUploaderContext, ImageUploaderContext> ();
 builder.Services.AddScoped<IUploadImageStrategy, UploadImageWithFirebase>();
+
 builder.Services.AddScoped<IImageConverterService, ImageConverterService>();
+builder.Services.AddScoped<IExeptionLogRepository, ExeptionLogRepository>();
+builder.Services.AddScoped<IExceptionLogService, ExceptionLogService>();
+builder.Services.AddScoped<GlobalExceptionFilter>();
 builder.Services.AddScoped<IFirebaseStorageService>(provider =>
 {
     return new FirebaseStorageService(firebaseBucketStorage);
@@ -106,6 +111,11 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt =>
         IssuerSigningKey = signinKey,
     };
 
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
 });
 
 var app = builder.Build();
