@@ -33,7 +33,8 @@ builder.Services.AddCors(options =>
 EnvConfig.Initialize();
 
 //now load the key from the environment variables\
-var jtwKey = Environment.GetEnvironmentVariable("JWT_KEY");
+//var jtwKey = Environment.GetEnvironmentVariable("JWT_KEY");
+var jtwKey = "885d8ee4a3c69838a0ca8474a10c0365213b31a3c6fa9222ae9e92cb63927c601a16c8e78213679dd9c4bbe5e0cc4704166366e1eea0aa82234142e89483d70e";
 var firebaseBucketStorage = "spmccr-d02b1.appspot.com";
 
 // Add services to the container.

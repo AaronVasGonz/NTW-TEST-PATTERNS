@@ -21,11 +21,16 @@ namespace Service.Services
         {
             try
             {
-                string originEmail = Environment.GetEnvironmentVariable("SMTP_GMAILEMAIL");
-                int port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT"));
+                // string originEmail = Environment.GetEnvironmentVariable("SMTP_GMAILEMAIL");
+                //int port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT"));
+                //string password = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
+                //string smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
+                string originEmail = "geekcocr@gmail.com'";
+                int port = 587;
+                string password = "zcoqbxndavpbcrlj";
+                string smtpServer = "smtp.gmail.com";
+
                 string destinationEmail = email;
-                string password = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
-                string smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
 
                 using (MailMessage mailMessage = new MailMessage(originEmail, destinationEmail, subject, message))
                 {
