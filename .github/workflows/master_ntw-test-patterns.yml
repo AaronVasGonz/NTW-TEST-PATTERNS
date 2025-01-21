@@ -22,16 +22,26 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --verbosity detailed
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp" --verbosity detailed
+
+      - name: List published files
+        run: dir "${{ env.DOTNET_ROOT }}/myapp"
+
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+      - name: Check Environment Variables
+        run: | 
+          echo "DOTNET_ROOT: ${{ env.DOTNET_ROOT }}"
+          echo "Client ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}"
+      - name: Validate Deployment
+        run: curl -f https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net || exit 1
 
   deploy:
     runs-on: windows-latest
@@ -61,5 +71,5 @@ jobs:
         with:
           app-name: 'NTW-TEST-PATTERNS'
           slot-name: 'Production'
-          package: .
+          package: ${{ env.DOTNET_ROOT }}/myapp
           
