@@ -39,7 +39,9 @@ var jtwKey = "885d8ee4a3c69838a0ca8474a10c0365213b31a3c6fa9222ae9e92cb63927c601a
 var firebaseBucketStorage = "spmccr-d02b1.appspot.com";
 
 // Add services to the container.
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -120,6 +122,8 @@ builder.Services.AddControllers(options =>
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -137,5 +141,11 @@ app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", (ILogger<Program> logger) =>
+{
+    logger.LogInformation("Hello, world!");
+    return "Hello, world!";
+});
 
 app.Run();
