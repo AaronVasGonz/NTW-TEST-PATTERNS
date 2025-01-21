@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 
+
+//test-comment
 public class EnvConfig
 {
     public static void Initialize()
