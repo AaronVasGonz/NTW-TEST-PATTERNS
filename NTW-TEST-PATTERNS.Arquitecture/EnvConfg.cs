@@ -9,7 +9,7 @@ public class EnvConfig
     public static void Initialize()
     {
       
-        var smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
+        /* var smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
 
         if (string.IsNullOrEmpty(smtpServer))
         {
@@ -18,7 +18,7 @@ public class EnvConfig
         else
         {
             Console.WriteLine("SMTP_SERVER: " + smtpServer);
-        }
+        }*/
     }
 
     public static string GetEnvVariable(string variable)

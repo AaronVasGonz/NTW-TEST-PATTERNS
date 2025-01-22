@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTW-TEST-PATTERNS.Arquitect
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTW-TEST-PATTERNS.Models", "NTW-TEST-PATTERNS.Models\NTW-TEST-PATTERNS.Models.csproj", "{7C6A600E-7A78-4447-8955-F0E9692BC507}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{9CCB5217-8A61-44D5-9A89-143F275BE898}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7C6A600E-7A78-4447-8955-F0E9692BC507}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C6A600E-7A78-4447-8955-F0E9692BC507}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C6A600E-7A78-4447-8955-F0E9692BC507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCB5217-8A61-44D5-9A89-143F275BE898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCB5217-8A61-44D5-9A89-143F275BE898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCB5217-8A61-44D5-9A89-143F275BE898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCB5217-8A61-44D5-9A89-143F275BE898}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

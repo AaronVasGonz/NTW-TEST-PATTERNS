@@ -21,6 +21,12 @@ using Service.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.ListenAnyIP(80);
+});
+
 builder.Services.AddHttpClient();
 builder.Services.AddCors(options =>
 {
