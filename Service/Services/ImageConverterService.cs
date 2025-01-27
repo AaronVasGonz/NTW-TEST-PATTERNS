@@ -10,10 +10,15 @@ namespace Service.Services;
 public interface IImageConverterService
 {
     Task<List<Stream>> ConvertImagesToStreamsAsync(IEnumerable<IFormFile> images);
+    Task<Stream> ConvertImageToStreamAsync(IFormFile image);
 }
 
 public class ImageConverterService : IImageConverterService
 {
+    public async Task<Stream> ConvertImageToStreamAsync(IFormFile image)
+    {
+        return image.OpenReadStream();
+    }
     public async Task<List<Stream>> ConvertImagesToStreamsAsync(IEnumerable<IFormFile> images)
     {
         var streams = new List<Stream>();

@@ -57,7 +57,7 @@ public class GoogleLogin : ILoginStrategy
         _configuration = configuration;
         _httpClient = httpClientFactory.CreateClient();
         _roles = new List<string>();
-       
+
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class GoogleLogin : ILoginStrategy
                 user = await _userService.SaveUserAsync(user);
 
                 // Add default role for new OAuth users
-                await _userRoleService.SaveUserRole(user.UserId, 1);
+                await _userRoleService.SaveUserRole(user.UserId ?? 0, 1);
             }
 
             var userRoles = await _userRoleService.GetUserRoles() ??
@@ -117,7 +117,7 @@ public class GoogleLogin : ILoginStrategy
                     _roles.Add(role.RoleName);
                 }
             }
-            var jwtToken = _jwtHandler.GenerateToken(user.UserId.ToString(), user.Username ,_roles, null);
+            var jwtToken = _jwtHandler.GenerateToken(user.UserId.ToString(), user.Username, _roles, null);
             return jwtToken;
         }
         catch (Exception ex)

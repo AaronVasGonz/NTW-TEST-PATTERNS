@@ -61,7 +61,7 @@ public class GithubLogin : ILoginStrategy
         throw new NotImplementedException();
     }
 
-      public async Task<string> LoginUserWithOAuth(OAuthRequest oAuthRequest)
+    public async Task<string> LoginUserWithOAuth(OAuthRequest oAuthRequest)
     {
         try
         {
@@ -93,7 +93,7 @@ public class GithubLogin : ILoginStrategy
                 user = await _userService.SaveUserAsync(user);
 
                 // Assign the user the default role
-                await _userRoleService.SaveUserRole(user.UserId, 1);
+                await _userRoleService.SaveUserRole(user.UserId ?? 0, 1);
             }
 
             // Get the roles for the user
@@ -112,7 +112,7 @@ public class GithubLogin : ILoginStrategy
                 }
             }
 
-            var token = _jwtHandler.GenerateToken(user.UserId.ToString(), user.Username ,_roles, null);
+            var token = _jwtHandler.GenerateToken(user.UserId.ToString(), user.Username, _roles, null);
 
             return token;
         }

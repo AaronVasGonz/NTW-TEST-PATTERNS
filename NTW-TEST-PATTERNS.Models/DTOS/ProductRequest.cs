@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Models.DTOS;
 public class ProductRequest
 {
+    public int? Id { get; set; }
     public string ProductName { get; set; }
     public string SupplierName { get; set; }
 

@@ -24,7 +24,7 @@ namespace NTW_TEST_PATTERNS.Controllers
         private readonly IJwtHandler _jwtHandler;
         private readonly IRoleService _roleService;
         private readonly IUserRoleService _userRoleService;
-        private readonly IUserService  _userService;
+        private readonly IUserService _userService;
         private readonly ISendEmailStrategyContext _sendEmailStrategyContext;
         private readonly ILogger<AuthenticationApiController> _logger;
         private readonly IPasswordHashingService _passwordHashingService;
@@ -59,94 +59,53 @@ namespace NTW_TEST_PATTERNS.Controllers
         [HttpPost("registerByEmail")]
         public async Task<IActionResult> RegisterByEmail([FromBody] UserRegistrationData userRegistrationData)
         {
-            try
+            var result = await _authenticationStrategyContext.RegisterUser(userRegistrationData);
+            var userId = result.UserId.ToString();
+            var username = result.Username;
+            var roleNames = new List<string>();
+
+            foreach (var userRole in result.UserRoles)
             {
-                var result = await _authenticationStrategyContext.RegisterUser(userRegistrationData);
-                var userId = result.UserId.ToString();
-                var username = result.Username;
-                var roleNames = new List<string>();
-
-                foreach (var userRole in result.UserRoles)
-                {
-                    var role = await _roleService.GetRoleByIdAsync(userRole.RoleId);
-                    roleNames.Add(role.RoleName);
-                }
-
-                var token = _jwtHandler.GenerateToken(userId, username ,roleNames, null);
-                var email = userRegistrationData.Email;
-                var subject = "Verification Token";
-                var host = $"{Request.Scheme}://{Request.Host}";
-                var message = $"Please click on the link below to verify your email address: \n\n{host}/verify-email/{token}";
-
-                await _sendEmailStrategyContext.SendEmailAsync(email, subject, message, token);
-
-                return Ok(new { message = "User registered successfully, check your email for the verification token" });
+                var role = await _roleService.GetRoleByIdAsync(userRole.RoleId);
+                roleNames.Add(role.RoleName);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while registering user");
 
-                var errorDetails = new
-                {
-                    success = false,
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace
-                };
+            var token = _jwtHandler.GenerateToken(userId, username, roleNames, null);
+            var email = userRegistrationData.Email;
+            var subject = "Verification Token";
+            var host = $"{Request.Scheme}://{Request.Host}";
+            var message = $"Please click on the link below to verify your email address: \n\n{host}/verify-email/{token}";
 
-                return StatusCode(500, errorDetails);
-            }
+            await _sendEmailStrategyContext.SendEmailAsync(email, subject, message, token);
+
+            return Ok(new { message = "User registered successfully, check your email for the verification token" });
         }
 
         [HttpPost("loginByEmail")]
         public async Task<IActionResult> LoginByEmailOrUsername([FromBody] UserLoginRequest userLoginRequest)
         {
-            try
-            {
-                var result =  await _loginStrategyContext.LoginUserBYEmailOrUsername(userLoginRequest);
-                return Ok(new { jwt = result });
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Error while logging in user");
-                var errorDetails = new
-                {
-                    success = false,
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace
-                };
-                return StatusCode(500, errorDetails);
-            }
+
+            var result = await _loginStrategyContext.LoginUserBYEmailOrUsername(userLoginRequest);
+            if (result == null)
+                throw new KeyNotFoundException("User not found");
+            return Ok(new { jwt = result });
         }
 
         [HttpPost("OAuth")]
-        public async Task<IActionResult> LoginByGoogle([FromBody] OAuthRequest  oAuthRequest)
+        public async Task<IActionResult> LoginByGoogle([FromBody] OAuthRequest oAuthRequest)
         {
-            try
+            switch (oAuthRequest.Provider)
             {
-                switch (oAuthRequest.Provider)
-                {
-                    case "Google":
-                         _loginStrategyContext.setLoginStrategy(new GoogleLogin(_userService,_passwordHashingService,_jwtHandler, _userRoleService, _configuration ,_httpClientFactory  ,_roleService ));
-                        var result = await _loginStrategyContext.LoginUserWithOAuth(oAuthRequest);
-                        return Ok(new { jwt = result });
-                    case "Github":
-                        _loginStrategyContext.setLoginStrategy(new GithubLogin(_userService, _passwordHashingService, _jwtHandler, _userRoleService, _configuration, _httpClientFactory, _roleService));
-                        var result2 = await _loginStrategyContext.LoginUserWithOAuth(oAuthRequest);
-                        return Ok(new { jwt = result2 });
-                    default:
-                        return BadRequest(new { message = "Invalid OAuth provider" });
-                }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Error while logging in user with OAuth");
-                var errorDetails = new
-                {
-                    success = false,
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace
-                };
-                return StatusCode(500, errorDetails);
+                case "Google":
+                    _loginStrategyContext.setLoginStrategy(new GoogleLogin(_userService, _passwordHashingService, _jwtHandler, _userRoleService, _configuration, _httpClientFactory, _roleService));
+                    var result = await _loginStrategyContext.LoginUserWithOAuth(oAuthRequest);
+                    return Ok(new { jwt = result });
+                case "Github":
+                    _loginStrategyContext.setLoginStrategy(new GithubLogin(_userService, _passwordHashingService, _jwtHandler, _userRoleService, _configuration, _httpClientFactory, _roleService));
+                    var result2 = await _loginStrategyContext.LoginUserWithOAuth(oAuthRequest);
+                    return Ok(new { jwt = result2 });
+                default:
+                    throw new Exception("Invalid OAuth provider");
             }
         }
     }

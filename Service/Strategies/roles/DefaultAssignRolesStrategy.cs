@@ -11,7 +11,7 @@ public class DefaultAssignRolesStrategy : IAssignRolesStrategy
 {
     public User AssignRolesToUser(User user, IEnumerable<Role> roles, List<int> roleIds)
     {
-        var selectedRoles = roles.Where(r => roleIds.Contains(r.RoleId)).ToList();
+        var selectedRoles = roles.Where(r => roleIds.Contains(r.RoleId ?? 0)).ToList();
         user.Roles = selectedRoles;
         return user;
     }

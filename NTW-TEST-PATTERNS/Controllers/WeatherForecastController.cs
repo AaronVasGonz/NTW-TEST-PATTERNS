@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using Service.Services.IA;
+using System.Text;
 
 namespace NTW_TEST_PATTERNS.Controllers
 {
@@ -6,6 +9,13 @@ namespace NTW_TEST_PATTERNS.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+
+        private readonly IOllamaService _ollamaService;
+
+        public WeatherForecastController(IOllamaService ollamaService)
+        {
+            _ollamaService = ollamaService;
+        }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -13,21 +23,12 @@ namespace NTW_TEST_PATTERNS.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IActionResult> Get(string prompt)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var ollamaResponse = await _ollamaService.GetOllamaResponseAsync(prompt, "llama3.1:8b");
+            return Ok(ollamaResponse);
         }
     }
 }

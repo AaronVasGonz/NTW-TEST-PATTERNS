@@ -26,36 +26,30 @@ namespace NTW_TEST_PATTERNS.Controllers
             var tokenIsValid = _jwtHandler.GetPrincipalFromToken(token);
             if (tokenIsValid == null)
             {
-                return BadRequest("Invalid token");
+                throw new ArgumentException("Invalid token");
             }
             //if the token is valid means that the email is verified
             //now were goin to extract the user id from the token
-            foreach (var claim in tokenIsValid.Claims)
-            {
-                Console.WriteLine($"Type: {claim.Type}, Value: {claim.Value}");
-            }
-
-            var userIdClaim = tokenIsValid.FindFirst(ClaimTypes.NameIdentifier); 
+            var userIdClaim = tokenIsValid.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
             {
-                return BadRequest("Invalid user ID in token");
+                throw new ArgumentException("Invalid token");
             }
 
             //now we are goin to get the user and update his status to Active
-            var user = await  _userService.GetUserByIdAsync(userId);
+            var user = await _userService.GetUserByIdAsync(userId);
 
             if (user == null)
             {
-                return BadRequest("User not found");
+                throw new KeyNotFoundException("User not found");
             }
 
-             user.Status = "Active";
+            user.Status = "Active";
 
             var updatedUser = await _userService.SaveUserAsync(user);
-
             if (updatedUser == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update user status");
+                throw new Exception("Failed to update user");
             }
             //now we redirect to the verified web page and pass the token as a query parameter
             return Redirect($"http://localhost:5173/signUp/EmailVerify?token={token}");

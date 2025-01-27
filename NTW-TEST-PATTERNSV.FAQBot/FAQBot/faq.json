@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What is Azure AI?",
+    "answer": "Azure AI is a set of AI services offered by Microsoft through the Azure cloud platform."
+  },
+  {
+    "question": "How can I create an Azure AI chatbot?",
+    "answer": "You can create an Azure AI chatbot using Azure Bot Service."
+  },
+  {
+    "question": "What services are offered by Azure AI?",
+    "answer": "Azure AI provides a range of services, including Text Analytics, Computer Vision, and more."
+  }
+]

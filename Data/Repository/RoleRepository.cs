@@ -11,6 +11,8 @@ namespace Data.Repository
     {
         Task<bool> DeleteRoleAsync(int id);
         Task<Role> GetRoleByIdAsync(int id);
+
+        Task<Role> GetRoleByNameAsync(string name);
         Task<IEnumerable<Role>> GetRolesAsync();
         Task<Role> SaveRoleAsync(Role role);
     }
@@ -80,5 +82,13 @@ namespace Data.Repository
             await DeleteAsync(role);
             return true; // Returns true indicating successful deletion
         }
+
+        public async Task<Role> GetRoleByNameAsync(string name)
+        {
+            var roles = await ReadAsync();
+            return roles.FirstOrDefault(r => r.RoleName == name);
+        }
+
+
     }
 }

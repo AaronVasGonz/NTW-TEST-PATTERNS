@@ -7,6 +7,7 @@ public interface IRoleService
 {
     Task<bool> DeleteRoleAsync(int id);
     Task<Role> GetRoleByIdAsync(int id);
+    Task<Role> GetRoleByNameAsync(string name);
     Task<IEnumerable<Role>> GetRolesAsync();
     Task<Role> SaveRoleAsync(Role role);
 }
@@ -38,6 +39,10 @@ public class RoleService : IRoleService
     public async Task<bool> DeleteRoleAsync(int id)
     {
         return await _roleRepository.DeleteRoleAsync(id);
+    }
+    public async Task<Role> GetRoleByNameAsync(string name)
+    {
+        return await _roleRepository.GetRoleByNameAsync(name);
     }
 }
 

@@ -15,6 +15,8 @@ public interface IProductImageService
     Task<IEnumerable<Product_Image>> GetProductImagesAsync();
     Task<IEnumerable<Product_Image>> GetProductImagesByProductIdAsync(int productId);
     Task<Product_Image> SaveProductImageAsync(Product_Image productImage);
+
+    Task<bool> DeleteProductImagesByProductIdAsync(int productId);
 }
 
 public class ProductImageService : IProductImageService
@@ -48,5 +50,10 @@ public class ProductImageService : IProductImageService
     public async Task<bool> DeleteProductImageAsync(int id)
     {
         return await _productImageRepository.DeleteProductImageAsync(id);
+    }
+
+    public async Task<bool> DeleteProductImagesByProductIdAsync(int productId)
+    {
+        return await _productImageRepository.DeleteProductImagesByProductIdAsync(productId);
     }
 }

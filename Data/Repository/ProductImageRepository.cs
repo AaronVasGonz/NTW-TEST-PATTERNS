@@ -14,6 +14,8 @@ public interface IProductImageRepository
     Task<IEnumerable<Product_Image>> GetProductImagesAsync();
     Task<IEnumerable<Product_Image>> GetProductImagesByProductIdAsync(int productId);
     Task<Product_Image> SaveProductImageAsync(Product_Image productImage);
+
+    Task<bool> DeleteProductImagesByProductIdAsync(int productId);
 }
 
 public class ProductImageRepository : RepositoryBase<Product_Image>, IProductImageRepository
@@ -52,4 +54,16 @@ public class ProductImageRepository : RepositoryBase<Product_Image>, IProductIma
         return await DeleteAsync(productImage);
     }
 
+  
+    public async Task<bool> DeleteProductImagesByProductIdAsync(int productId)
+    {
+        var productImages = await GetProductImagesByProductIdAsync(productId);
+        foreach (var productImage in productImages)
+        {
+            await DeleteAsync(productImage);
+        }
+        if (productImages.Count() > 0)
+            return true;
+        return false;
+    }
 }

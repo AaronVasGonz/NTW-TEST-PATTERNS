@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.EFModels;
 using Service.Services;
-using System;
 
 namespace Service.Filters
 {
@@ -25,10 +24,44 @@ namespace Service.Filters
                 Date = DateTime.Now
             };
 
-            _exceptionLogService.SaveAsync(exceptionLog).Wait();
+            // Save the error in the logs
             _exceptionLogService.SaveAsync(exceptionLog).Wait();
 
-            context.Result = new ObjectResult("An error occurred") { StatusCode = 500 };
+            //Classify the exception and return the appropriate status code
+            if (exception is ArgumentException || exception is InvalidOperationException)
+            {
+                // return Bad Request (400)
+                context.Result = new BadRequestObjectResult(new
+                {
+                    Error = exception.Message,
+                    Code = 400
+                });
+                context.HttpContext.Response.StatusCode = 400;
+            }
+            else if (exception is KeyNotFoundException)
+            {
+                //return Not Found (404)
+                context.Result = new NotFoundObjectResult(new
+                {
+                    Error = exception.Message,
+                    Code = 404
+                });
+                context.HttpContext.Response.StatusCode = 404;
+            }
+            else
+            {
+                // Return an Internal Server Error (500)
+                context.Result = new ObjectResult(new
+                {
+                    Error = "An unexpected error occurred. Please try again later.",
+                    Code = 500
+                })
+                {
+                    StatusCode = 500
+                };
+            }
+
+            // mark the exception as handled
             context.ExceptionHandled = true;
         }
     }
